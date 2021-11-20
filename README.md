@@ -1,2 +1,4 @@
 # Shell-Scripting
-Learning about Bash scripting for my data engineer journey.
+Welcome to my Shell scripting repo, where I teach myself shell scripting using bash.
+
+
