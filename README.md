@@ -9,7 +9,7 @@ Note that on the man page, parameters enclosed in square brackets are **optional
 # Display the UID
 echo "Your UID is $UID"	
 
-# Display the username: Use the id command ```$(man id)```
+# Display the username: Use the id command ```$(man id)```. You can also use the ```$(whoami)``` command to get the username.
 USER_NAME=$(id -un)
 echo "Your username is $USER_NAME"
 ```
