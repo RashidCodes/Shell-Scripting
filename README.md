@@ -64,6 +64,8 @@ then
 fi
 ```
 
+<br/>
+
 ## Test for != (not equal) for the string
 ```bash
 if [[ ${USERNAME} != ${USER_NAME_TO_TEST_FOR} ]]
