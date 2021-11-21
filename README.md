@@ -36,6 +36,8 @@ fi
 USER_NAME=$(id -un)
 ```
 
+<br/>
+
 ## Test if the command succeeded
 
 ```${?}``` checks the exit status of the most recently executed command
