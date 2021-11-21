@@ -1,119 +1,37 @@
-#  Naming Permissions
+# Special Variables
 
-## Create a new file
+## Display the UID and username of the user executing this script
+You can use the man page to read the documentation on UID: $(man bash) and search for 'UID' (/UID). 
+Note that on the man page, parameters enclosed in square brackets are **optional**.
+
 ```bash
-vi luser-demo01.sh
+
+# Display the UID
+echo "Your UID is $UID"	
+
+# Display the username: Use the id command ```$(man id)```
+USER_NAME=$(id -un)
+echo "Your username is $USER_NAME"
+```
+
+
+## Root user or not
+When you're using variables like this, you want to enclose them in quotation marks. Use $(help if) for help on the if statement. You can use the test command ```$(man test)``` to learn about testing with the if statement
+
+```bash
+
+if [[ "${UID}" -eq 0 ]]
+then
+  echo "You are root."
+else
+  echo "You are not root."
+fi
 ```
 
 <br/>
 
-Note: File extensions don't matter on Linux
-
-<br/>
-
+## Execute as root
 ```bash
-#!/bin/bash
-
-# Displaying information to the screen
-
-echo 'Hello'
+sudo ./this_file.sh
 ```
-
-## Permissions on a file
-
-```bash
--rw-r--r-- 1 vagrant vagrant
-```
-
-r - read
-w - write
-x - executable
-
-- The first three characters ```(rw-)``` represents the permissions of the owners of the file, 
-- the next three characters ```(r--)``` represent the permissions of the group of the file,
-- and the last three characters ```(r--)``` represent the permissions that everyone else has to this file.
-
-
-<br/>
-
-## Grant executable permissions
-We need to give users the ability to execute this file. This is done with ```chmod``` like the code below
-
-```bash
-chmod 755 luser-demo01.sh
-```
-
-This changes the permission to 
-```bash
--rwxr-xr-x
-```
-
-<br/>
-
-## Why 755?
-- r = 4
-- w = 2
-- x = 1
-
-## Executing the script
-```bash
-./luser-demo01.sh
-```
-
-<br/>
-
-
-# Shell builtins
-
-## The echo command
-
-Check if a command is a shell builtin using the command below
-
-```bash
-type -a echo
-```
-
-## Get help on a shell builtin
-```bash
-help echo | less
-```
-
-
-<br/>
-
-## Get help on commands that are not shell builtins
-You can use the ```man ${command}``` command to read the manual of a command
-
-```bash
-man uptime
-```
-
-
-<br/>
-
-## Assigning variables
-It's very important that there are no spaces around the equal signs.
-```bash
-WORD='script'
-```
-
-<br/>
-
-## Referencing a variable
-```bash
-# Single quotes prevent the expansion of variables
-echo "${WORD}"
-
-# Or
-
-echo "This is a $WORD"
-
-# Appending text to a variable: You need to use the ${} syntax
-echo "Bash ${WORD}ing is fun"
-```
-
-
-
-
-
 
