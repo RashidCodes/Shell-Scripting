@@ -1,96 +1,116 @@
-# Box installation
+#  Naming Permissions
 
-## Download a box from the vagrant repo
+## Create a new file
 ```bash
-vagrant box add jasonc/centos7
+vi luser-demo01.sh
 ```
 
 <br/>
 
-## Create a folder and run the command below
+Note: File extensions don't matter on Linux
+
+<br/>
+
 ```bash
-mkdir shellclass && cd shellclass && vagrant init
+#!/bin/bash
+
+# Displaying information to the screen
+
+echo 'Hello'
+```
+
+## Permissions on a file
+
+```bash
+-rw-r--r-- 1 vagrant vagrant
+```
+
+r - read
+w - write
+x - executable
+
+- The first three characters ```(rw-)``` represents the permissions of the owners of the file, 
+- the next three characters ```(r--)``` represent the permissions of the group of the file,
+- and the last three characters ```(r--)``` represent the permissions that everyone else has to this file.
+
+
+<br/>
+
+## Grant executable permissions
+We need to give users the ability to execute this file. This is done with ```chmod``` like the code below
+
+```bash
+chmod 755 luser-demo01.sh
+```
+
+This changes the permission to 
+```bash
+-rwxr-xr-x
 ```
 
 <br/>
 
-## Run the command below to start the virtual machine(s). You may have to read some documentation to configure your box 
+## Why 755?
+- r = 4
+- w = 2
+- x = 1
+
+## Executing the script
 ```bash
-vagrant up
+./luser-demo01.sh
 ```
 
 <br/>
 
-## Vagrant file config
-```bash
-Vagrant.configure("2") do |config|
 
-  config.vm.box = "jasonc/centos7"
-  config.vm.hostname = "testbox01"
-  config.vm.network "private_network", ip: "10.9.8.7"
-done
+# Shell builtins
+
+## The echo command
+
+Check if a command is a shell builtin using the command below
+
+```bash
+type -a echo
+```
+
+## Get help on a shell builtin
+```bash
+help echo | less
+```
+
+
+<br/>
+
+## Get help on commands that are not shell builtins
+You can use the ```man ${command}``` command to read the manual of a command
+
+```bash
+man uptime
+```
+
+
+<br/>
+
+## Assigning variables
+It's very important that there are no spaces around the equal signs.
+```bash
+WORD='script'
 ```
 
 <br/>
 
-## Destroy a VM
+## Referencing a variable
 ```bash
-vagrant destroy
+# Single quotes prevent the expansion of variables
+echo "${WORD}"
+
+# Or
+
+echo "This is a $WORD"
+
+# Appending text to a variable: You need to use the ${} syntax
+echo "Bash ${WORD}ing is fun"
 ```
-
-<br/>
-
-## Creating multiple virtual machines
-```bash
-Vagrant.configure("2") do |config|
-  config.vm.box = "jasonc/centos7"
-
-  config.vm.define "test1" do |test1|
-    test1.vm.hostname = "test1"
-    test1.vm.network "private_network", ip: "10.9.8.5"
-  end
-
-
-  config.vm.define "test2" do |test2|
-    test2.vm.hostname = "test2"
-    test2.vm.network "private_network", ip: "10.9.8.6"
-  end
-
-done
-```
-
-<br/>
-
-## Bringing up a virtual machine
-```bash
-vagrant up test1
-```
-
-<br/>
-
-## Check the status of the virtual machines
-```bash
-vagrant status
-```
-
-<br/>
-
-## SSH into the VM
-```bash
-vagrant ssh test1
-```
-
-<br/>
-
-## Ping a VM
-```bash
-ping -c3 10.9.8.5
-```
-
-
-
-
-
 
 
 
