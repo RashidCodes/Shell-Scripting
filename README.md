@@ -1,37 +1,86 @@
-# Special Variables
+# Exit Statuses, Return Codes, String Test Conditionals, More Special variables
 
 ## Display the UID and username of the user executing this script
-You can use the man page to read the documentation on UID: $(man bash) and search for 'UID' (/UID). 
-Note that on the man page, parameters enclosed in square brackets are **optional**.
 
+
+## Check if the user is the vagrant user or not
 ```bash
-
-# Display the UID
-echo "Your UID is $UID"	
-
-# Display the username: Use the id command ```$(man id)```. You can also use the ```$(whoami)``` command to get the username.
-USER_NAME=$(id -un)
-echo "Your username is $USER_NAME"
-```
-
-
-## Root user or not
-When you're using variables like this, you want to enclose them in quotation marks. Use $(help if) for help on the if statement. You can use the test command ```$(man test)``` to learn about testing with the if statement
-
-```bash
-
-if [[ "${UID}" -eq 0 ]]
-then
-  echo "You are root."
-else
-  echo "You are not root."
-fi
+echo "Your UID is ${UID}"
 ```
 
 <br/>
 
-## Execute as root
+## Display if the UID does not match 1000
+
+You can read more about exit statuses by using the man page
 ```bash
-sudo ./this_file.sh
+man useradd
+
+## Then search for "EXIT VALUES"
 ```
+
+<br/>
+
+```bash
+UID_TO_TEST_FOR='1000'
+
+if [[ "${UID}" -ne "${UID_TO_TEST_FOR}" ]]
+then
+  echo "Your UID does not match ${UID}."
+  
+  # Stop the execution of a script using the exit command
+  exit 1
+fi 
+
+## Display the username
+USER_NAME=$(id -un)
+```
+
+## Test if the command succeeded
+
+```${?}``` checks the exit status of the most recently executed command
+
+```bash
+if [[ "${?}" -ne 0 ]]
+then
+ echo "The id command did not execute successfully"
+ exit 1
+fi
+
+echo "Your username is $USER_NAME" 
+```
+
+<br/>
+
+## Use a string test conditional
+```bash
+USER_NAME_TO_TEST_FOR='vagrant'
+
+if [[ ${USER_NAME} = ${USER_NAME_TO_TEST_FOR} ]]
+then
+  echo "Your username matches ${USER_NAME_TO_TEST_FOR}"
+fi
+```
+
+## Test for != (not equal) for the string
+```bash
+if [[ ${USERNAME} != ${USER_NAME_TO_TEST_FOR} ]]
+then
+  echo "Your username does not match $USER_NAME_TO_TEST_FOR"
+  exit 1
+fi
+
+## Successful execution
+exit 0
+```
+
+
+
+
+
+
+
+
+
+
 
