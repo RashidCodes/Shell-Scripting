@@ -2,8 +2,6 @@
 
 ## Display the UID and username of the user executing this script
 
-
-## Check if the user is the vagrant user or not
 ```bash
 echo "Your UID is ${UID}"
 ```
@@ -31,6 +29,8 @@ then
   # Stop the execution of a script using the exit command
   exit 1
 fi 
+
+<br/>
 
 ## Display the username
 USER_NAME=$(id -un)
