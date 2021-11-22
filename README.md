@@ -1,90 +1,79 @@
-# Exit Statuses, Return Codes, String Test Conditionals, More Special variables
+# Reading standard input, Creating accounts, Username conventions, More Quoting
 
-## Display the UID and username of the user executing this script
+Bring up your virtual machine...
 
+## Create an account on the local system
+
+### Ask for the user's name
+You can read about the ```$(read)``` command using: ```help read | less```
+
+### A brief aside on inputs
+There are different kinds of inputs namely:
+- Standard Input: By **default**, standard input comes from the keyboard.
+- Standard Output: Standard output is displayed on the screen.
+- Standard Error: Standadr error is also displayed on the screen.
+
+ 
 ```bash
-echo "Your UID is ${UID}"
+read -p 'Enter the username to create: ' USER_NAME
+
 ```
 
 <br/>
 
-## Display if the UID does not match 1000
 
-You can read more about exit statuses by using the man page
+### Ask for the real name
 ```bash
-man useradd
-
-## Then search for "EXIT VALUES"
+read -p 'Enter the name of the person who this account is for: ' COMMENT
 ```
 
 <br/>
 
+
+### Ask for the password
 ```bash
-UID_TO_TEST_FOR='1000'
-
-if [[ "${UID}" -ne "${UID_TO_TEST_FOR}" ]]
-then
-  echo "Your UID does not match ${UID}."
-  
-  # Stop the execution of a script using the exit command
-  exit 1
-fi 
-
-<br/>
-
-## Display the username
-USER_NAME=$(id -un)
+read -p 'Enter the password to use for the account: ' PASSWORD
 ```
 
 <br/>
 
-## Test if the command succeeded
 
-```${?}``` checks the exit status of the most recently executed command
+
+### Create the user
+Read on the ```useradd``` command ```man useradd```. In order to add users to a system, you need superuser privileges. There's an option to the useradd command called ```-c --comment``` and its used to add a user. Generally, its a short description of a LOGIN and historically it's been used with the name of the LOGIN.
+
+```-m, --create-home```: Creates the user's home directory if it does not exist. Use the man page to read more. Open the ```/etc/login.defs``` to see the default configuration.
 
 ```bash
-if [[ "${?}" -ne 0 ]]
-then
- echo "The id command did not execute successfully"
- exit 1
-fi
+useradd -c "${COMMENT}" -m ${USER_NAME} # The comment variable may contain spaces.
 
-echo "Your username is $USER_NAME" 
+<br/>
+
+
+### Set the password for the user
+Read more the ```passwd``` command ```(man passwd)```. We'll be using the ```--stdin``` option to allow ```passwd``` to read the new password from standard input. We also want the user to change their password when they login. For this, we'll be using the ```-e, --expire``` option.
+
+```bash
+echo ${PASSWORD} | passwd --stdin ${USER_NAME} 
 ```
 
 <br/>
 
-## Use a string test conditional
-```bash
-USER_NAME_TO_TEST_FOR='vagrant'
 
-if [[ ${USER_NAME} = ${USER_NAME_TO_TEST_FOR} ]]
-then
-  echo "Your username matches ${USER_NAME_TO_TEST_FOR}"
-fi
+### Force the user to change their password on first login
+```bash
+passwd -e ${USER_NAME}
 ```
 
 <br/>
 
-## Test for != (not equal) for the string
+## Run this code using root priveleges because we are adding a user.
+
+<br/>
+
+
+## Switch users
 ```bash
-if [[ ${USERNAME} != ${USER_NAME_TO_TEST_FOR} ]]
-then
-  echo "Your username does not match $USER_NAME_TO_TEST_FOR"
-  exit 1
-fi
-
-## Successful execution
-exit 0
+sudo su - $USER_NAME
 ```
-
-
-
-
-
-
-
-
-
-
 
