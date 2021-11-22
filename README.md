@@ -46,6 +46,7 @@ Read on the ```useradd``` command ```man useradd```. In order to add users to a 
 
 ```bash
 useradd -c "${COMMENT}" -m ${USER_NAME} # The comment variable may contain spaces.
+```
 
 <br/>
 
