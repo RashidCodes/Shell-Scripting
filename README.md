@@ -1,80 +1,50 @@
-# Reading standard input, Creating accounts, Username conventions, More Quoting
+# Random Data, Cryptographic Hash Functions, Text and String Manipulation
 
-Bring up your virtual machine...
 
-## Create an account on the local system
-
-### Ask for the user's name
-You can read about the ```$(read)``` command using: ```help read | less```
-
-### A brief aside on inputs
-There are different kinds of inputs namely:
-- Standard Input: By **default**, standard input comes from the keyboard.
-- Standard Output: Standard output is displayed on the screen.
-- Standard Error: Standadr error is also displayed on the screen.
-
- 
+## Generate a list of random passwords
+Read on the ```RANDOM``` variable on the man page.
 ```bash
-read -p 'Enter the username to create: ' USER_NAME
+PASSWORD=${RANDOM}
 
+# Three random numbers together
+PASSWORD="${RANDOM}${RANDOM}${RANDOM}"
 ```
 
 <br/>
 
-
-### Ask for the real name
+## Using the date and time to create a password
+Read about the ```date``` command on the man page. The ```head``` and ```sha256sum``` commands are also worth checking out.
 ```bash
-read -p 'Enter the name of the person who this account is for: ' COMMENT
+PASSWORD=$(date +%s%N)
 ```
 
 <br/>
 
-
-### Ask for the password
+## Creating a better password
 ```bash
-read -p 'Enter the password to use for the account: ' PASSWORD
+PASSWORD=$(date +%s%N | sha256sum | head -c32)
+echo "$PASSWORD"
 ```
 
 <br/>
 
-
-
-### Create the user
-Read on the ```useradd``` command ```man useradd```. In order to add users to a system, you need superuser privileges. There's an option to the useradd command called ```-c --comment``` and its used to add a user. Generally, its a short description of a LOGIN and historically it's been used with the name of the LOGIN.
-
-```-m, --create-home```: Creates the user's home directory if it does not exist. Use the man page to read more. Open the ```/etc/login.defs``` to see the default configuration.
-
+## An even better password
+Adding a few random numbers and increasing the password length
 ```bash
-useradd -c "${COMMENT}" -m ${USER_NAME} # The comment variable may contain spaces.
+PASSWORD=$(date +%s%N${RANDOM}${RANDOM} | sha256sum | head -c48)
 ```
 
 <br/>
 
-
-### Set the password for the user
-Read more the ```passwd``` command ```(man passwd)```. We'll be using the ```--stdin``` option to allow ```passwd``` to read the new password from standard input. We also want the user to change their password when they login. For this, we'll be using the ```-e, --expire``` option.
-
+## Adding a special character
 ```bash
-echo ${PASSWORD} | passwd --stdin ${USER_NAME} 
-```
+LIST_OF_SPECIAL_CHARACTERS='!@#$%^&*()_+='
 
-<br/>
+## We need to select one character at random
+SPECIAL_CHARACTER=$(LIST_OF_SPECIAL_CHARACTERS | fold -w1 | shuf | head -c1)
 
+## Append the special character to the password
+PASSWORD=${PASSWORD}{SPECIAL_CHARACTER}"
+``
 
-### Force the user to change their password on first login
-```bash
-passwd -e ${USER_NAME}
-```
-
-<br/>
-
-## Run this code using root priveleges because we are adding a user.
-
-<br/>
-
-
-## Switch users
-```bash
-sudo su - $USER_NAME
-```
 
