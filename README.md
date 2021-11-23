@@ -19,7 +19,7 @@ The path variable is an environment variable that contains an ordered list of pa
 /usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/sbin:/home/vagrant/bin
 ```
 
-The path variable is not read-only so it can be modified. For example, we can redirect Linux to look for the ```head``` command in /usr/local/bin instead of the orignal /usr/bin as shown in the code below. You many need superuser privileges to execute some of the commands.
+The path variable is not read-only so it can be modified. For example, we can redirect Linux to look for the ```head``` command in ```/usr/local/bin``` instead of the orignal ```/usr/bin``` as shown in the code below. You many need superuser privileges to execute some of the commands.
 
 ```bash
 # the location of the original head command
@@ -60,7 +60,7 @@ Now we can execute ```rashid.sh``` without supplying a path to the script.
 /usr/local/bin/rashid.sh
 ```
 
-Note that ```${0}``` will return the full path of rashid.sh.
+Note that ```${0}``` will return the full path of ```rashid.sh```.
 
 
 <br/>
