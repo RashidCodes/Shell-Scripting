@@ -151,7 +151,7 @@ head -n1 /etc/passwd /etc/hosts /fakefile > /dev/null
 ```
 <br/>
 
-USE CASE: If you're executing a command in your script and you don't want the user to see the output of the command then just redirect it to the null device. If you wanted to know if a command succeeded or not, you can simply check the exit status.
+**USE CASE**: If you're executing a command in your script and you don't want the user to see the output of the command then just redirect it to the null device. If you wanted to know if a command succeeded or not, you can simply check the exit status.
 
 
 
