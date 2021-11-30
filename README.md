@@ -16,7 +16,7 @@ function log(){
   echo 'You called the log function'
 }
 
-# calling the function: You don't need to use the openeing paranthesis
+# calling the function: You don't need to use the openeing parenthesis
 log
 ```
 
@@ -91,7 +91,7 @@ Read about the logger command using ```man logger```. The logger command writes 
 
 An example of how the ```logger``` command is used.
 ```bash
-The -t command tags the name of the service or program using the logger
+# The -t command tags the name of the service or program using the logger
 logger -t my-script 'Tagging on.'
 ```
 
@@ -105,7 +105,7 @@ log(){
   fi
   
   # Sent the message to the log file
-  logger -t "${0}" "${MESSAGE}"
+  logger -t "${0}" "${message}"
 }
 
 log 'hello!'
@@ -129,6 +129,7 @@ Here we use a function to backup a few files.
 
 
 ### A brief aside about the ```/tmp``` directory
+
 The files in ```/var/tmp/``` survive a reboot whereas the files in ```/tmp/``` are not guaranteed to survive a reboot. Typically the files in ```/tmp/``` are cleared on boot and are also cleared more often than on a running system.
 
 <br/>
@@ -158,7 +159,7 @@ backup_file(){
 
 ```
 
-Each function like every command, returns an exit status. By default, a function returns the exit status of the last command in that function. Remember that the ```exit``` keyword exits the entire script whereas the ```return``` keyword exists a function.
+Each function, like every command, returns an exit status. By default, a function returns the exit status of the last command in that function. Remember that the ```exit``` keyword exits the entire script whereas the ```return``` keyword exists a function.
 
 
 <br/>
