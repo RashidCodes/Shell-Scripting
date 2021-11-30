@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Make sure the script is executed using root privileges
+# You can also use $UID
 if [[ $(id -u) -ne 0 ]]
 then
   echo "Please run with sudo or root" >&2 # redirecting to standard error
