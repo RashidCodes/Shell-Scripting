@@ -1,43 +1,27 @@
-# How to create functions using bash
-
-Read about functions using the function builtin command. Use ```help function``` to read about functions. Functions are like littel scripts within a script.
-
-```bash
-#!/bin/bash
-
-# Creating the function
-# Functions have to be defined before they're used.
-log(){
-  echo 'You called the log function'
-}
-
-# You can also create a function using the function keyword
-function log(){
-  echo 'You called the log function'
-}
-
-# calling the function: You don't need to use the openeing parenthesis
-log
-```
+# Parsing command line arguments with ```getopts```
+Getopts is shell builtin and you can check that using the ```type -a getopts``` command. It's recommended that shell builtins be used more often because it makes scripts more portable.
 
 <br/>
 
-## The ```local``` keyword and passing arguments
-Local makes a variable **local** in-scope to the function. The value of that variable is only accessible within the function. The local function can only be used within a function. It's best practice to use local variables inside your functions that way you won't accidentally reuse variable names.
+## Provide documentation about the script
 
 ```bash
-log(){
-  local MESSAGE="${@}"
-  echo "${MESSAGE}"
-}
+usage(){
+  echo "Usage: ${0} [-vs] [-l LENGTH]" >&2
+  echo 'Generate a random password.'
+  echo '  -l LENGTH   Specify the password length.'
+  echo '  -s          Append a special character to the password.'
+  echo '  -v          'Increase verbosity.'
 
-log 'Hello!'
-log 'This is fun!'
-```
+  # If they ended up there then it means they did something wrong
+  exit 1
+
+}
+``` 
 
 <br/>
 
-## A look at global variables
+### Checking the ```VERBOSE``` option
 ```bash
 log(){
   local MESSAGE="${@}"
@@ -47,156 +31,68 @@ log(){
   fi
 }
 
-log 'Hello!'
-
-## Setting the global VERBOSE variable to true
-VERBOSE='true'
-
-log 'This is fun!'
-
 ```
 
 <br/>
 
-## The ```readonly``` command
-The readonly command makes a variable unchangeable or unmodifiable. Think of it as a ```const``` from Javascript. The variable cannot be changed for the duration of the script. Thus, it cannot be changed inside or outside of a function.
+## Creating a script that generates a password using ```getopts```.
 
+Have a read about the getopts command: ```help getopts```.
+
+
+### Parsing the options with ```getopts```
 ```bash
-log(){
-  local message="${@}"
-  if [[ "${verbose}" = 'true' ]]
-  then
-    echo "${message}"
-  fi
-}
+LENGTH=48
 
-log 'hello!'
+while getopts vl:s OPTION
+do 
+  case ${OPTION} in
+    v)
+      VERBOSE='true'
+      log 'Verbose mode on.'
+      ;;
 
-## setting the global verbose variable to true
-verbose='true'
-readonly verbose
+    l)
+      LENGTH="${OPTARG}"
+      ;;
+    s)
+      USE_SPECIAL_CHARACTER='true'
+      ;;
+    ?)
+      usage
+      exit 1
+  esac
+done
 
-## you can also do this
-readonly verbose='true'
 
-log 'this is fun!'
-
-```
-
-<br/>
-
-
-## Sending messages to the system's log
-Read about the logger command using ```man logger```. The logger command writes messages to the ```/var/log/messages```. You need root permissions to read that file so you'll have to read it's data using something like ```sudo tail /var/log/messages```.
-
-An example of how the ```logger``` command is used.
-```bash
-# The -t command tags the name of the service or program using the logger
-logger -t my-script 'Tagging on.'
-```
-
-### Adding the logging functionality to our script
-```bash
-log(){
-  local message="${@}"
-  if [[ "${verbose}" = 'true' ]]
-  then
-    echo "${message}"
-  fi
-  
-  # Sent the message to the log file
-  logger -t "${0}" "${message}"
-}
-
-log 'hello!'
-
-## setting the global verbose variable to true
-verbose='true'
-readonly verbose
-
-## you can also do this
-readonly verbose='true'
-
-log 'this is fun!'
+log 'Generating password'
 
 ```
 
 <br/>
 
 
-## Backing up files
-Here we use a function to backup a few files. 
-
-
-### A brief aside about the ```/tmp``` directory
-
-The files in ```/var/tmp/``` survive a reboot whereas the files in ```/tmp/``` are not guaranteed to survive a reboot. Typically the files in ```/tmp/``` are cleared on boot and are also cleared more often than on a running system.
-
-<br/>
-
-### A brief aside about the ```cp``` command. 
-
-The ```-p``` option copies a file in preserve mode. This keeps the timestamps the way they were instead of using today's timestamp. A use case for this could be when the need arises to replace a lost file. The file can then be replaced using the original copy. 
-
+### Generating the password
 ```bash
-backup_file(){
-  # This funciton creates a backup of a file. Returns non-zero status on error.
+PASSWORD=$(date +%s%N${RANDOM}${RANDOM} | sha256sum | head -c${LENGTH})
 
-  local FILE="${1}"
-
-  # Make sure the file exists
-  if [[ -f "${FILE}" ]]
-  then
-    local BACKUP_FILE="/var/tmp/$(basename ${FILE}).$(date +%F-%N)"
-    log "Backing up ${FILE} to ${BACKUP_FILE}."
-
-    # The exit status of the function will be the exit status of the cp command
-    cp -p ${FILE} ${BACKUP_FILE}
-  else
-    # The file does not exist, so return a non-zero exit status
-    return 1
-
-  fi
-}
-
-```
-
-Each function, like every command, returns an exit status. By default, a function returns the exit status of the last command in that function. Remember that the ```exit``` keyword exits the entire script whereas the ```return``` keyword exists a function.
-
-
-<br/>
-
-### Backing up the ```/etc/passwd``` file
-```bash
-backup_file '/etc/passwd'
-
-
-## Check the status of the function
-if [[ "${?}" -eq '0' ]]
+# Append a special character if requested to do so
+if [[ "${USE_SPECIAL_CHARACTER}" = 'true' ]]
 then
-  log 'File backup succeeded!'
-else
-  log 'File backup failed!'
-  exit 1
+  log 'Selecting a random special character'
+  SPECIAL_CHARACTER=$(echo '!@#$%^&*()_+=' | fold -w1 | shuf | head -c1)
+  PASSWORDa="${PASSWORD}${SPECIAL_CHARACTER}"
 fi
+
+log 'Done!'
+log 'Here is the password.'
+
+# Display the password
+# Display the password whether VERBOSE is true or not
+echo "${PASSWORD}"
+
+exit 0
+
 ```
-
-<br/>
-
-### Check to see if the messages made it to the log file
-```bash
-sudo tail /var/log/messages
-```
-
-<br/>
-
-### Check if the file was copied to ```/var/tmp```
-```bash
-ls -l /var/tmp
-```
-
-<br/>
-
-Lastly, you can use the ```type -a ${function-name}``` command to read the code that makes up a function called ***function_name***
 
 
