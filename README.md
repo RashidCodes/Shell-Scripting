@@ -134,7 +134,9 @@ The files in ```/var/tmp/``` survive a reboot whereas the files in ```/tmp/``` a
 
 <br/>
 
-### A brief aside about the ```cp``` command. The ```-p``` option copies a file in preserve mode. This keeps the timestamps the way they were instead of using today's timestamp. A use case for this could be when the need arises to replace a lost file. The file can then be replaced using the original copy. 
+### A brief aside about the ```cp``` command. 
+
+The ```-p``` option copies a file in preserve mode. This keeps the timestamps the way they were instead of using today's timestamp. A use case for this could be when the need arises to replace a lost file. The file can then be replaced using the original copy. 
 
 ```bash
 backup_file(){
