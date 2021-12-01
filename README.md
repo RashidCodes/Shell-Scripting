@@ -64,6 +64,18 @@ do
   esac
 done
 
+# Inspect OPTIND
+echo "OPTIND: $OPTIND"
+
+# Remove the options while leaving the remaining arguments
+shift "$(( OPTIND - 1))"
+
+# Now you can parse arguments using ${a}, ${#}, and so on
+# Let's check to make sure users don't pass in any arguments from the command line
+if [[ "{#}" -gt 0 ]]
+then
+  usage
+fi
 
 log 'Generating password'
 
@@ -94,5 +106,71 @@ echo "${PASSWORD}"
 exit 0
 
 ```
+
+
+<br/>
+<br/>
+
+## Arithmetic Expansion
+You can perform arithmetic operations using the code below
+```bash
+# Basic substraction
+NUM=$((10 - 1))
+
+# Post increment
+NUM=$((NUM++))
+
+# Post decrement
+((NUM--)) # notice that we didn't need the '$' sign here
+
+# Increment and reassignment
+((NUM += 5))
+
+# Modulo
+NUM=$((NUM % 2)) # Checking for even numbers
+
+
+# Using variables
+a=10
+b=20
+
+NUM=$(( a + b )) # Notice how we did not use the '$' symbol
+
+
+```
+
+If you need to perform complex calculations then perhaps you can use an external program, for eg. bc which stands for external calculator. You can install it using ```sudo yum install -y bc```. Read about bc command. 
+```bash
+# Float operations using the basic calculator
+echo '6/4' | bc -l
+
+# You can also use the awk command
+awk 'BEGIN {print 6/4 }'
+```
+
+
+<br/>
+
+### The ```let``` bash builtin
+Read about ```let```: ```help let```. It pretty much does the same thing as using double parenthesis.
+
+```bash
+let NUM++	
+echo $NUM
+```
+
+<br/>
+
+### The ```expr``` command
+The ```expr``` command processes an expression and returns it output to STDOUT. Read about it using ```man expr```
+
+```bash
+expr 1 + 1
+
+NUM=$(expr 2+3)
+```
+
+
+
 
 
