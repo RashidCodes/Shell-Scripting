@@ -45,3 +45,118 @@ sudo find / -name userdel 2> /dev/null
 Or you can simply switch to root ( not recommended) using ``` su - ```.'
 
 
+<br/>
+
+## Removing a user
+```bash
+userdel nanie
+```
+
+Using the ```userdel``` command like this deletes the user but keeps the user's files on the system. This might come in handly if you want access to a user's files after they have been removed.
+
+<br/>
+
+## Remove a user and their home directory
+```bash
+userdel -r nanie
+```
+
+<br/>
+
+## A brief aside about UID's
+The root user always has a ```UID``` of 0. System accounts have lower UID's. This is set in a file called ```/etc/login.defs```. Peruse it if you will.
+
+
+<br/>
+
+## Storing home directories with the ```tar``` command. Peruse the man page for this command (```man tar```).
+```
+# Create some random videos
+mkdir catvideos
+touch catvideos/admiral-catbar.mp4
+touch catvideos/darthpaw.mp4
+touch catvideos/luke-claw.mp4
+
+
+# creat an archive of the cat videos
+tar -cf catvideos.tar catvideos
+
+# Look at its contents
+tar -tf catvideos.tar 
+
+# remove the old tar file
+rm catvideos.tar
+
+# Using the verbose option to see the files added to the archive
+tar -cvf catvideos.tar catvideos
+
+# extracting the contents of a tar file
+mkdir restore
+cd restore
+tar -xf ../catvideos.tar 
+
+
+# extracting with the verbose option
+mkdir restore
+cd restore
+tar -xvf 
+```
+
+
+<br/>
+
+## Compressing a tar file
+```bash
+gzip catvideos.tar
+```
+
+<br/>
+
+## Uncompress a tar file
+```bash
+gunzip catvideos.tar.gz
+```
+
+<br/>
+
+You can also perform the compression on the archive when you create it.
+```bash
+tar -zcvf catvideos.tar.gz catvideos/
+
+# View the contents of a compressed archive
+tar -ztvf catvideos.tar.gz 
+```
+
+<br/>
+
+Some people like to give a compressed archive a file extension of ```tgz```. for example
+```bash
+tar -zcvf catvideos.tgz catvideos/
+``
+`
+
+
+The tar command will happily overwrite any existing files. Keep that in mind.
+```bash
+# Let's put some data in darthpaw
+echo 'hello' > catvideos/darthpaw.mp4
+
+# Extract the archive again
+tar -zxvf ../catvideos.tgz
+
+# View the contents of darthpaw
+cat catvideos/darthpaw.mp4 # Nothing is found because tar overwrote the file
+```
+
+<br/>
+
+```tar``` relies on file permissions like any other command does. So you can't use tar on files you don't have permissions to.
+
+
+
+
+
+
+
+
+
