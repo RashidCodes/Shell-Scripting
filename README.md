@@ -133,8 +133,7 @@ tar -ztvf catvideos.tar.gz
 Some people like to give a compressed archive a file extension of ```tgz```. for example
 ```bash
 tar -zcvf catvideos.tgz catvideos/
-``
-`
+```
 
 
 The tar command will happily overwrite any existing files. Keep that in mind.
