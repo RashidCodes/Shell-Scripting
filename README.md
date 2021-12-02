@@ -69,7 +69,8 @@ The root user always has a ```UID``` of 0. System accounts have lower UID's. Thi
 
 <br/>
 
-## Storing home directories with the ```tar``` command. Peruse the man page for this command (```man tar```).
+## Storing home directories with the ```tar``` command.
+Peruse the man page for this command (```man tar```).
 ```
 # Create some random videos
 mkdir catvideos
