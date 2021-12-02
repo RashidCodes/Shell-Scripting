@@ -24,7 +24,7 @@ locate userdel | grep 'bin'
 
 ## Manually searching for the file
 So let's say the ```locate``` command is not found; you can use your knowledge of the linux filesystem to find possible places where the ```userdel``` command might live. For example,
-```userdel``` is a system admin command and similar commands can be found in the ```sbin``` directory. Moreover, since the command is an executable, you can narrow search to the ```bin``` and ```sbin``` directories.
+```userdel``` is a system admin command and similar commands can be found in the ```sbin``` directory. Alternatively, since the command is an executable, you can narrow search to the ```bin``` and ```sbin``` directories.
 
 <br/>
 
