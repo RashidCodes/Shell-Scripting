@@ -4,7 +4,7 @@ The best way to lock a user's account for security reasons is to use the ```chag
 
 ```bash
 # Expire the nanie account
-sudo chage -E 0 woz
+sudo chage -E 0 nanie
 ```
 
 You can also lock the password of a specified account using the ```-l``` flag. Check out the man page for the ```passwd``` command. Locking a user with a password command like this does not prevent a user from logging in with an SSH key. So if users can login via SSH then you're better off using the chage command.
