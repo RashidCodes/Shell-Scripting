@@ -68,7 +68,7 @@ do
   if [[ "${ARCHIVE}" = 'true' ]]
   then
     # Make sure the ARCHIVE_DIR 
-    if [[ ! -d "$ARCHIVE_DIR" ]]
+    if [[ ! -d "${ARCHIVE_DIR}" ]]
     then
       echo "Creating ${ARCHIVE_DIR} directory."
       mkdir -p $ARCHIVE_DIR
@@ -98,10 +98,10 @@ do
   fi
 
 
-  if [[ ${DELETE_USER} = 'true' ]]
+  if [[ $DELETE_USER = 'true' ]]
   then
     # Delete the user
-    userdel ${REMOVE_OPTION} ${USERNAME}
+    userdel $REMOVE_OPTION $USERNAME
   
     # Check to see if the userdel command succeeded
     # We don't want the user thinking an account got deleted when it really did not get deleted
