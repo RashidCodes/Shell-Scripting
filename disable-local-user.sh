@@ -68,7 +68,7 @@ do
   if [[ "${ARCHIVE}" = 'true' ]]
   then
     # Make sure the ARCHIVE_DIR 
-    if [[ ! -d "$ARCHIVE_DIR ]]
+    if [[ ! -d "$ARCHIVE_DIR" ]]
     then
       echo "Creating ${ARCHIVE_DIR} directory."
       mkdir -p $ARCHIVE_DIR
