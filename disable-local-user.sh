@@ -85,7 +85,7 @@ do
   ARCHIVE_FILE="${ARCHIVE_DIR}/${USERNAME}.tgz"
   if [[ -d $HOME_DIR ]]
   then 
-    echo "Archiving $HOME_DIR to $ARCHIVE_FILE
+    echo "Archiving $HOME_DIR to $ARCHIVE_FILE"
     tar -zcf $ARCHIVE_FILE $HOME_DIR &> /dev/null
     if [[ "${?}" -ne 0 ]]
     then
