@@ -65,7 +65,7 @@ do
 
 
   # Create an archive 
-  if [[ "${ARCHIVE}" = 'true ]]
+  if [[ "${ARCHIVE}" = 'true' ]]
   then
     # Make sure the ARCHIVE_DIR 
     if [[ ! -d "$ARCHIVE_DIR ]]
