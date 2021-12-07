@@ -15,6 +15,9 @@ Use the ```-n``` option to sort numerically
 cut -d ':' -f 3 /etc/passwd | sort -n
 
 
+<br/>
+
+
 ## The ```du``` command
 
 The ```du``` command is used to estimate file space usage. Let's find out which directory in ```/var``` uses the most space.
@@ -28,6 +31,7 @@ sudo du -h /var | sort -n
 
 Sort has a human-readable sort. Implement this using the ```-h``` option.
 
+<br/>
 
 ## Using ```netstat``` with sort
 The ```netstat``` command is used to print network connections, routing tables, etc. Read about ```netstat``` on its man page.
@@ -61,7 +65,7 @@ Use the ```-t``` option to specify a delimiter for the file, and then use the ``
 
 ```cat /etc/passwd | sort -t ':' -k 3 -n```
 
-
+<br/>
 
 ## The ```uniq``` command
 The ```uniq``` command reports or omits repeated lines. Checkout the man page about the command.
