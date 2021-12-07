@@ -18,4 +18,20 @@ To create an ssh key: ```ssh-keygen```
 To copy the ssh key to the remote systems: ```ssh-copy-id```.
 
 
+<br/>
+
+## Run commands
+Make sure you try out the different options to check if they work.
+
+<br/>
+
+### Verbose mode
+
+```./run-everywhere.sh -v uptime```
+
+<br/>
+
+### Run as a superuser
+
+```./run-everywhere.sh -ns id```
 

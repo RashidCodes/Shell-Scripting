@@ -69,7 +69,7 @@ for SERVER in $(cat ${SERVER_LIST})
 do
   if [[ "${VERBOSE}" = 'true' ]]
   then
-    echo "${VERBOSE}"
+    echo "${SERVER}"
   fi
 
 
