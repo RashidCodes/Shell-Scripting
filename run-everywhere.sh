@@ -12,7 +12,7 @@ usage(){
   echo "   -f FILE Use FILE for the list of servers. Default ${SERVER_LIST}." >&2
   echo '   -n      Dry run mode. Display the COMMAND that would have been executed and exit.' >&2
   echo '   -s      Execute the COMMAND using sudo on the remote server.' >&2
-  echo '   -v      Verbose mode. Displays the server name before executing COMMAND. >&2
+  echo '   -v      Verbose mode. Displays the server name before executing COMMAND.' >&2
   exit 1
 }
 
@@ -33,7 +33,7 @@ do
     f) SERVER_LIST="${OPTARG}" ;;
     n) DRY_RUN='true' ;;
     s) SUDO='sudo' ;;
-    v) VERBOSE='true ;;
+    v) VERBOSE='true' ;;
     ?) usage ;;
   esac
 done
@@ -79,7 +79,7 @@ do
   # If it's a dry run, don't execute anything, just echo it
   if [[ "${DRY_RUN}" = 'true' ]]
   then
-    echo "DRY RUN: ${SSH_COMMAND}
+    echo "DRY RUN: ${SSH_COMMAND}"
   else
     ${SSH_COMMAND}
     SSH_EXIT_STATUS="${?}"
