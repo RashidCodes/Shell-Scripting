@@ -1,176 +1,113 @@
-# The ```Cut``` and ```Awk``` commands
+# The ```sort``` command
+The ```sort``` command is used to sort the lines of text files. Peruse the man page for the ```sort``` command for more information.
 
-Read about the ```cut``` command on the man page because it's not a shell builtin. It's a standalone utility.
+```sort /etc/passwd```. 
 
-## Display the characters of each line
-```bash
-# first character
-cut -c 1 /etc/passwd
+Use the ```-r``` option to reverse the result.
 
-# third, fifth, and sixth characters
-cut -c 3,5,6 /etc/passwd # cut spits out a set of characters thus no order is guaranteed
-```
+```sort -r /etc/passwd```
 
-<br/>
+Sort can also except *STDIN* for example,
 
-## Display a range of characters on each line
-```bash
-# fourth character to the seventh
-cut -c 4-7 /etc/passwd
+cut -d ':' -f 3 /etc/passwd | sort 
 
-# fourth character to the end
-cut -c 4- /etc/passwd
+Use the ```-n``` option to sort numerically
+cut -d ':' -f 3 /etc/passwd | sort -n
 
-# first character to the fourth
-cut -c -4 /etc/passwd
-```
 
-<br/>
+## The ```du``` command
 
-You can also use ```-b``` to cut by byte.
+The ```du``` command is used to estimate file space usage. Let's find out which directory in ```/var``` uses the most space.
 
-<blockquote>Note that some characters that are made up of multiple bytes, for eg. UTF-8 characters.</blockquote>
+sudo du /var | sort -n
 
-<br/>
+Let's usage the ```-h``` option of du to print the sizes in a human-readable form
 
-## Using STDIN with cut
-```bash
-echo "nu" | cut -c 1
-```
+sudo du -h /var | sort -n
 
-<br/>
 
-## Cut by field
-Cut by field by using the ```-f``` option
-```bash
-# print first field
-echo -e 'one\ttwo\tthree' | cut -f 1
+Sort has a human-readable sort. Implement this using the ```-h``` option.
 
-# print second field
-echo -e 'one\ttwo\tthree' | cut -f 2
-```
 
-<br/>
+## Using ```netstat``` with sort
+The ```netstat``` command is used to print network connections, routing tables, etc. Read about ```netstat``` on its man page.
 
-## Specifying a delimiter with the ```cut``` command
-Use the ```-d``` option. 
-```bash
-echo 'one,two,three' | cut -d ',' -f 3
-```
+Let's list all open ports using tcp and udp protocols
 
-<blockquote> You may also people not placeing a space around the delimiter. This is not recommended. </blockquote>
+```netstat -nutl```
 
-For example cut won't work in the code below, because of the line-continuation character.
-```bash
-echo 'one\two\three' | cut -d \ -f 3
-```
+Let's look for the open ports using the ```grep``` command
 
+```netstat -nutl | grep ':'```
+
+The ip and port can extracted using ```awk``` as follows.
+
+```netstat -nutl | grep ':' | awk '{print $4}'```
+
+It's now easy to extract the port
+
+```netstat -nutl | grep ':' | awk '{print $4}' | awk -F ':' '{print $NF}'```
+
+We can now sort the ports
+```netstat -nutl | grep ':' | awk '{print $4}' | awk -F ':' '{print $NF}' | sort -nu```
+
+The ```-u``` option in ```sort``` takes into account, unique values.
 
 <br/>
 
-## Change the output delimiter of the ```cut``` command using ```--output-delimiter``` option
-```bash
-# Notice that the output is delimited by the original delimiter
-cut -d ':' -f 1,3 /etc/passwd
 
-# Change it using the --output-delimiter option
-cut -d ':' -f 1,3 --output-delimiter=',' /etc/passwd
-```
+## Sorting with a key
+Use the ```-t``` option to specify a delimiter for the file, and then use the ```-k``` option to sort by key.
+
+```cat /etc/passwd | sort -t ':' -k 3 -n```
+
+
+
+## The ```uniq``` command
+The ```uniq``` command reports or omits repeated lines. Checkout the man page about the command.
+
+```netstat -nutl | grep ':' | awk '{print $4}' | awk -F ':' '{print $NF}' | sort -n | uniq```
+
+This may look like an extra step but the ```uniq``` command has other useful features. For example, you can count the number of repettions of a line.
+
+```netstat -nutl | grep ':' | awk '{print $4}' | awk -F ':' '{print $NF}' | sort -n | uniq -c```
+
+Let's say you want to count the number of *syslog* messages a program is generating. The folder of interest is ```/var/log/messages```. 
+
+```sudo cat /var/log/messages | awk '{print $5}' | sort | uniq -c | sort -n```
 
 
 <br/>
 
-## The ```grep``` command
-The ```grep``` command is used to print lines matching a pattern. Checkout the man page to learn more about the command.
+## The ```wc``` command
+The ```wc``` command is used to print the newline, word, and byte counts for each file. Peruse the man page for more information. Let's use the ```wc``` command to get some information about users on a linux system.
 
-Let's create some csv file
-```bash
-echo 'first,last' > people.csv
-echo 'John,Smitt' >> people.csv
-echo 'firstly,mclastly' >> people.csv
-echo 'Mr. firstly,mclasty' >> people.csv
-```
+```wc /etc/passwd```
 
-Let's say you want to print lines that contain the word 'first' in the csv file
-```grep first people.csv```
+The first number is the number of lines, the second is the number of words, and the last is the number of bytes.
+
+
+### How many accounts are using the ```bash``` shell
+
+```grep bash /etc/passwd | wc -l```
+
+You can also use the ```-c``` option for ```grep``` to count the number of lines.
+
 
 <br/>
 
-### Using regular expressions with ```grep```
-Let's match lines that start with the string, "first" using the caret symbol (```^```).
 
-```grep '^first' people.csv```
+## Parsing a web log file
+We'll end this session by parsing a sample log file (access_log) to find the number of times the different end-points have been hit.
 
-You can also match the end of a string with the ```$``` symbol. For example, we can match lines that start with 'first' and end with 'last' like so.
-
-```grep '^first,last$' people.csv```.
-
-You can invert matching with the ```-v``` option.
-
-```grep -v '^first,last$' people.csv```
-
-Now we can remove the header using the following.
-```grep -v '^first,last$' people.csv | cut -d ',' -f 1```
-
-You can also reverse the process by cutting first before 'grepping'.
+```cut -d  '"' -f 2 access_log | awk '{print $1}' | grep 'http*' | uniq -c```
 
 
-### Splitting on multiple characters
-Splitting on multiple characters can't be done using the ```cut``` command but you can leverage the power of the ```awk``` command. A demo is provided below.
-```bash
-cp people.csv people.dat
-
-# edit people.dat as follows
-DATA:firstDATA:last
-DATA:JohnDATA:Smitt
-DATA:firstlyDATA:mclasty
-DATA:Mr. firstlyDATA:mclasty
-
-```
-
-You may want to split by 'DATA:' but this will not work
-
-```cut -d 'DATA:' -f 2 people.dat```
-
-This is where the ```awk``` command shines.
 
 
-## The ```awk``` command
-
-```awk -F 'DATA:' '{print $2}' people.dat```
-
-The ```-F``` option specifies a delimiter. The statement in ```{}``` represent some action.
-
-You can print multiple fields as follows
-
-```awk -F 'DATA:' '{print $2, $3}' people.dat```
-
-You can see that ```awk``` separates the fields with a space. This is because the comma (```,```) represents the *output field separator (OFS)*. ```awk``` has a special builtin variable called **OFS**. You can change this variable to whatever you'd like. 
-
-### Change a variable in ```awk```
-
-To change a variable in ```awk```, use the ```-v``` to reassign that variable. So to change OFS to a space (```" "```), you can do this.
-
-```awk -F ':' -v OFS=',' '{print $1, $3}' people.csv```
-
-Instead of setting the OFS variable, you can specify a string
-
-```awk -F ':'  '{print $1, "," $3}' /etc/passwd```.
-
-You can also add strings to your print statements
-
-```awk -F ':' '{print "COL1: " $1 "COL2: " $2}' /etc/passwd```
 
 
-Unlike the ```cut``` command, the ```awk``` command allows you to specify an order for your fields. For example,
-
-```awk -F ':' '{print $3, $1}' /etc/passwd``` 
-
-prints the third fields before the first field.
 
 
-In addition to $1, $2, and so on, ```awk``` gives us ```$NF``` which represents the *number of fields* found.
-
-```awk -F ':' '{print $NF}' /etc/passwd```
 
 
