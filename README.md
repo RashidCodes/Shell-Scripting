@@ -62,7 +62,7 @@ Once the command looks well-formated, you can execute it remotely.
 If one of the servers is down, you'll get a gracious error.
 
 - Turn off one of servers using ```vagrant halt SERVER_NAME```
-- Run the ```run-everywhere.sh``` file on ```admin01``` and you'll see that command execution on the server that is turned off will fail.
+- Run the ```run-everywhere.sh``` file on ```admin01``` and you'll see that the command execution on the server that is turned off will fail.
 
 
 This brings us to the end of learning about Shell scripting with bash. Wishing you all the best in your dev Journey Rashid. Peace!
