@@ -35,3 +35,35 @@ Make sure you try out the different options to check if they work.
 
 ```./run-everywhere.sh -ns id```
 
+### Add a special list of servers
+
+```bash
+echo 'server01' > test
+
+./run-everywhere.sh -f test hostname
+```
+
+<br/>
+
+## Create a new user on the server
+
+You'll need to format your command properly. First, check the command that'll be executed using a *dry-run*.
+
+```./run-everywhere.sh -ns 'useradd -c "Test Two" test2'```.
+
+Once the command looks well-formated, you can execute it remotely.
+
+```./run-everywhere.sh -s 'useradd -c "Test Two" test2'```
+
+<br/>
+
+## Shutting down a server
+
+If one of the servers is down, you'll get a gracious error.
+
+- Turn off one of servers using ```vagrant halt SERVER_NAME```
+- Run the ```run-everywhere.sh``` file on ```admin01``` and you'll see that command execution on the server that is turned off will fail.
+
+
+This brings us to the end of learning about Shell scripting with bash. Wishing you all the best in your dev Journey Rashid. Peace!
+
